@@ -1,5 +1,5 @@
 {
-  "name": "my-turborepo",
+  "name": "social-relay",
   "private": true,
   "scripts": {
     "build": "turbo run build",
