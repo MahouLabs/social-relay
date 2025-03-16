@@ -1,6 +1,7 @@
 import { Hono } from "hono";
-import { auth } from "./auth"; // path to your auth file
-import { cors } from "hono/cors";
+import { logger } from "hono/logger";
+import { auth } from "./auth";
+import { sessionContext } from "./middleware";
 
 const app = new Hono<{
   Variables: {
@@ -9,36 +10,17 @@ const app = new Hono<{
   };
 }>();
 
-app.use("*", async (c, next) => {
-  const session = await auth.api.getSession({ headers: c.req.raw.headers });
-
-  if (!session) {
-    c.set("user", null);
-    c.set("session", null);
-    return next();
-  }
-
-  c.set("user", session.user);
-  c.set("session", session.session);
-  return next();
-});
-
-app.use(
-  "/api/auth/*",
-  cors({
-    origin: "http://localhost:3001", // replace with your origin
-    allowHeaders: ["Content-Type", "Authorization"],
-    allowMethods: ["POST", "GET", "OPTIONS"],
-    exposeHeaders: ["Content-Length"],
-    maxAge: 600,
-    credentials: true,
-  }),
-);
+app.use(logger());
+app.use("*", sessionContext);
 
 app.get("/", (c) => {
   return c.text("Hello Hono!");
 });
 
-app.on(["POST", "GET"], "/api/auth/**", (c) => auth.handler(c.req.raw));
+app.on(["POST", "GET"], "/api/auth/**", (c) => {
+  console.log(process.env.BETTER_AUTH_URL, process.env.BETTER_AUTH_SECRET);
+  return auth.handler(c.req.raw);
+});
+// app.on(["POST", "GET"], "/api/auth/**", (c) => auth.handler(c.req.raw));
 
 export default app;
