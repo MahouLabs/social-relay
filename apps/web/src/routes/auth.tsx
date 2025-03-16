@@ -1,6 +1,6 @@
+import { SignUp } from "@/components/signup";
 import { signIn, signUp } from "@/utils/auth-client";
 import { createFileRoute } from "@tanstack/react-router";
-
 export const Route = createFileRoute("/auth")({
   component: RouteComponent,
 });
@@ -23,7 +23,8 @@ function RouteComponent() {
 
   return (
     <div className="flex min-h-screen items-center justify-center">
-      <div className="rounded-lg bg-white p-8 shadow-md">
+      <SignUp />
+      {/* <div className="rounded-lg bg-white p-8 shadow-md">
         <h1 className="mb-6 text-2xl font-bold">Authentication</h1>
         <button
           type="button"
@@ -40,7 +41,7 @@ function RouteComponent() {
         >
           SignUp with Better Auth
         </button>
-      </div>
+      </div> */}
     </div>
   );
 }

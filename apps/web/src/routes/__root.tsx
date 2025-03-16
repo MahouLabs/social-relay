@@ -25,7 +25,8 @@ export const Route = createRootRoute({
       ...seo({
         title:
           "TanStack Start | Type-Safe, Client-First, Full-Stack React Framework",
-        description: "TanStack Start is a type-safe, client-first, full-stack React framework.",
+        description:
+          "TanStack Start is a type-safe, client-first, full-stack React framework.",
       }),
     ],
     links: [
@@ -76,7 +77,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body>
+      <body className="dark">
         <div className="p-2 flex gap-2 text-lg">
           <Link
             to="/"
