@@ -28,7 +28,7 @@ function RouteComponent() {
         <button
           type="button"
           onClick={handleSignIn}
-          className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+          className="rounded-sm bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
         >
           SignIn with Better Auth
         </button>
@@ -36,7 +36,7 @@ function RouteComponent() {
         <button
           type="button"
           onClick={handleSignUp}
-          className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+          className="rounded-sm bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
         >
           SignUp with Better Auth
         </button>
