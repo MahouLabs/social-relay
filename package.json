@@ -5,12 +5,13 @@
     "build": "turbo run build",
     "dev": "turbo run dev db:studio",
     "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "format": "turbo run format",
     "check-types": "turbo run check-types",
     "db:generate": "turbo run db:generate",
     "db:migrate": "turbo run db:migrate"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.9.4",
     "prettier": "^3.5.3",
     "turbo": "^2.4.4",
     "typescript": "5.8.2"

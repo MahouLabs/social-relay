@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vinxi dev",
     "build": "vinxi build",
-    "start": "vinxi start"
+    "start": "vinxi start",
+    "lint": "biome lint . --apply",
+    "format": "biome format . --write"
   },
   "dependencies": {
     "@tanstack/react-router": "^1.114.17",
