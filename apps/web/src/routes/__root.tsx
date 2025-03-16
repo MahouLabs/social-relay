@@ -1,6 +1,6 @@
 import { DefaultCatchBoundary } from "@/components/default-catch-boundary";
 import { NotFound } from "@/components/not-found";
-import appCss from "@/styles/app.css?url";
+import appCss from "@/styles/globals.css?url";
 import { seo } from "@/utils/seo";
 import {
   HeadContent,
@@ -25,7 +25,7 @@ export const Route = createRootRoute({
       ...seo({
         title:
           "TanStack Start | Type-Safe, Client-First, Full-Stack React Framework",
-        description: `TanStack Start is a type-safe, client-first, full-stack React framework. `,
+        description: "TanStack Start is a type-safe, client-first, full-stack React framework.",
       }),
     ],
     links: [
@@ -72,7 +72,7 @@ function RootComponent() {
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html>
+    <html lang="en">
       <head>
         <HeadContent />
       </head>
