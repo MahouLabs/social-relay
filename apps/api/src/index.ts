@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { logger } from "hono/logger";
 import { auth } from "./auth";
-import { sessionContext } from "./middleware";
+import { sessionMiddleware } from "./middleware";
 
 const app = new Hono<{
   Variables: {
@@ -11,14 +11,13 @@ const app = new Hono<{
 }>();
 
 app.use(logger());
-app.use("*", sessionContext);
+app.use("*", sessionMiddleware);
 
 app.get("/", (c) => {
   return c.text("Hello Hono!");
 });
 
 app.on(["POST", "GET"], "/api/auth/**", (c) => {
-  console.log(process.env.BETTER_AUTH_URL, process.env.BETTER_AUTH_SECRET);
   return auth.handler(c.req.raw);
 });
 // app.on(["POST", "GET"], "/api/auth/**", (c) => auth.handler(c.req.raw));
