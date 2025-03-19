@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { auth } from "./auth";
 import { sessionMiddleware } from "./middleware";
@@ -9,6 +10,17 @@ const app = new Hono<{
     session: typeof auth.$Infer.Session.session | null;
   };
 }>();
+
+app.use(
+  "*",
+  cors({
+    origin: "https://app.social-relay.com",
+    allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+    maxAge: 600,
+  }),
+);
 
 app.use(logger());
 app.use("*", sessionMiddleware);
