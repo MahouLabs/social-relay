@@ -10,13 +10,13 @@ export const seo = ({
   keywords?: string;
 }) => {
   const tags = [
-    { title },
+    { title: "Social Relay" },
     { name: "description", content: description },
     { name: "keywords", content: keywords },
     { name: "twitter:title", content: title },
     { name: "twitter:description", content: description },
-    { name: "twitter:creator", content: "@tannerlinsley" },
-    { name: "twitter:site", content: "@tannerlinsley" },
+    { name: "twitter:creator", content: "@nchartiot" },
+    { name: "twitter:site", content: "@nchartiot" },
     { name: "og:type", content: "website" },
     { name: "og:title", content: title },
     { name: "og:description", content: description },
