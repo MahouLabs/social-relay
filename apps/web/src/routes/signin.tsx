@@ -1,5 +1,4 @@
 import { SignIn } from "@/components/signin";
-import { SignUp } from "@/components/signup";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/signin")({
