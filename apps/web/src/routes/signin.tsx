@@ -6,7 +6,6 @@ export const Route = createFileRoute("/signin")({
 });
 
 function RouteComponent() {
-  console.log(process.env);
   return (
     <section className="flex flex-col min-h-screen items-center justify-center p-4">
       <SignIn />
