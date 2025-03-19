@@ -1,7 +1,8 @@
 {
   "name": "social-relay-api",
   "scripts": {
-    "start": "bun run src/index.ts",
+    "build": "bun build --production --target=bun --outfile=server.js ./src/index.ts",
+    "start": "bun run server.js",
     "dev": "bun run --hot src/index.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
@@ -20,5 +21,6 @@
     "bun-types": "^1.2.5",
     "dotenv": "^16.4.7",
     "drizzle-kit": "^0.30.5"
-  }
+  },
+  "packageManager": "bun@1.2.5"
 }
