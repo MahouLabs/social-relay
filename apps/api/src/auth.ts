@@ -7,5 +7,9 @@ export const auth = betterAuth({
     provider: "sqlite",
   }),
   emailAndPassword: { enabled: true },
-  trustedOrigins: ["http://localhost:3001"],
+  trustedOrigins: [
+    process.env.NODE_ENV === "production"
+      ? "https://app.social-relay.com"
+      : "http://localhost:3001",
+  ],
 });
