@@ -3,3 +3,17 @@ name = "social-relay-web"
 pages_build_output_dir = "./dist"
 compatibility_flags = ["nodejs_compat"]
 compatibility_date = "2024-11-13"
+
+#[site]
+#bucket = "./dist"
+
+#[build]
+#command = "npm run build"
+#watch_dir = "src"
+
+#[env.production]
+#workers_dev = false
+
+[git]
+repo = "mahoulabs/social-relay"
+branch = "main"
