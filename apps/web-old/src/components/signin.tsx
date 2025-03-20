@@ -9,23 +9,26 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { signIn } from "@/utils/auth-client";
+import { authClient } from "@/utils/auth-client";
+import { useLocation, useRouter } from "@tanstack/react-router";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { AuthNavigation } from "./auth-navigation";
 
 export function SignIn() {
+  const { search } = useLocation();
+  const router = useRouter();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleEmailSignIn = async () => {
-    await signIn.email(
+    await authClient.signIn.email(
       {
         email: email,
         password: password,
-        callbackURL: "/",
       },
       {
         onRequest: () => {
@@ -33,6 +36,7 @@ export function SignIn() {
         },
         onResponse: () => {
           setLoading(false);
+          router.history.push(search.redirect ?? "/");
         },
         onError: (ctx) => {
           console.log({ ctx });
@@ -43,7 +47,7 @@ export function SignIn() {
   };
 
   const handleGoogleSignIn = async () => {
-    await signIn.social({
+    await authClient.signIn.social({
       provider: "google",
     });
   };

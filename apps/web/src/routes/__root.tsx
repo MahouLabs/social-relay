@@ -1,19 +1,44 @@
-import { DefaultCatchBoundary } from "@/components/default-catch-boundary";
-import { NotFound } from "@/components/not-found";
-import { Toaster } from "@/components/ui/sonner";
-import appCss from "@/styles/globals.css?url";
-import { seo } from "@/utils/seo";
+import type { QueryClient } from "@tanstack/react-query";
 import {
   HeadContent,
   Link,
   Outlet,
+  ScriptOnce,
   Scripts,
-  createRootRoute,
+  createRootRouteWithContext,
+  useRouter,
 } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-import type * as React from "react";
+import { createServerFn } from "@tanstack/react-start";
+import { getWebRequest } from "@tanstack/react-start/server";
 
-export const Route = createRootRoute({
+import { AuthUIProvider } from "@daveyplate/better-auth-ui";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
+
+import appCss from "@/styles/globals.css?url";
+import authClient from "@/utils/auth-client";
+
+const getUser = createServerFn({ method: "GET" }).handler(async () => {
+  const { headers } = getWebRequest()!;
+  const session = await authClient.getSession({
+    fetchOptions: { headers },
+    query: { disableCookieCache: true },
+  });
+
+  return session?.data?.user || null;
+});
+
+export const Route = createRootRouteWithContext<{
+  queryClient: QueryClient;
+  user: Awaited<ReturnType<typeof getUser>>;
+}>()({
+  beforeLoad: async ({ context }) => {
+    const user = await context.queryClient.fetchQuery({
+      queryKey: ["user"],
+      queryFn: ({ signal }) => getUser({ signal }),
+    }); // we're using react-query for caching, see router.tsx
+    return { user };
+  },
   head: () => ({
     meta: [
       {
@@ -23,44 +48,12 @@ export const Route = createRootRoute({
         name: "viewport",
         content: "width=device-width, initial-scale=1",
       },
-      ...seo({
-        title:
-          "TanStack Start | Type-Safe, Client-First, Full-Stack React Framework",
-        description:
-          "TanStack Start is a type-safe, client-first, full-stack React framework.",
-      }),
+      {
+        title: "Social Relay",
+      },
     ],
-    links: [
-      { rel: "stylesheet", href: appCss },
-      {
-        rel: "apple-touch-icon",
-        sizes: "180x180",
-        href: "/apple-touch-icon.png",
-      },
-      {
-        rel: "icon",
-        type: "image/png",
-        sizes: "32x32",
-        href: "/favicon-32x32.png",
-      },
-      {
-        rel: "icon",
-        type: "image/png",
-        sizes: "16x16",
-        href: "/favicon-16x16.png",
-      },
-      { rel: "manifest", href: "/site.webmanifest", color: "#fffff" },
-      { rel: "icon", href: "/favicon.ico" },
-    ],
+    links: [{ rel: "stylesheet", href: appCss }],
   }),
-  errorComponent: (props) => {
-    return (
-      <RootDocument>
-        <DefaultCatchBoundary {...props} />
-      </RootDocument>
-    );
-  },
-  notFoundComponent: () => <NotFound />,
   component: RootComponent,
 });
 
@@ -72,74 +65,39 @@ function RootComponent() {
   );
 }
 
-function RootDocument({ children }: { children: React.ReactNode }) {
+function RootDocument({ children }: { readonly children: React.ReactNode }) {
+  const router = useRouter();
+
   return (
-    <html lang="en">
+    // suppress since we're updating the "dark" class in a custom script below
+    <html suppressHydrationWarning lang="en">
       <head>
         <HeadContent />
       </head>
-      <body className="dark">
-        {/* <div className="p-2 flex gap-2 text-lg">
-            <Link
-              to="/"
-              activeProps={{
-                className: "font-bold",
-              }}
-              activeOptions={{ exact: true }}
-            >
-              Home
-            </Link>{" "}
-            <Link
-              to="/posts"
-              activeProps={{
-                className: "font-bold",
-              }}
-            >
-              Posts
-            </Link>{" "}
-            <Link
-              to="/users"
-              activeProps={{
-                className: "font-bold",
-              }}
-            >
-              Users
-            </Link>{" "}
-            <Link
-              to="/route-a"
-              activeProps={{
-                className: "font-bold",
-              }}
-            >
-              Pathless Layout
-            </Link>{" "}
-            <Link
-              to="/deferred"
-              activeProps={{
-                className: "font-bold",
-              }}
-            >
-              Deferred
-            </Link>{" "}
-            <Link
-              // @ts-expect-error
-              to="/this-route-does-not-exist"
-              activeProps={{
-                className: "font-bold",
-              }}
-            >
-              This Route Does Not Exist
-            </Link>
-            <div className="ml-auto flex items-center gap-4">
-              <Link to="/signin">SignIn</Link>
-              <Link to="/signup">SignUp</Link>
-            </div>
-          </div> */}
-        <hr />
-        {children}
-        <TanStackRouterDevtools position="bottom-right" />
-        <Scripts />
-        <Toaster />
+      <body>
+        <ScriptOnce>
+          {`document.documentElement.classList.toggle(
+          'dark',
+          localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
+          )`}
+        </ScriptOnce>
+
+        <AuthUIProvider
+        
+          authClient={authClient}
+          navigate={(href) => router.navigate({ href })}
+          replace={(href) => router.navigate({ href, replace: true })}
+          LinkComponent={({ href, to, ...props }) => (
+            <Link to={href} {...props} />
+          )}
+        >
+          {children}
+
+          <ReactQueryDevtools buttonPosition="bottom-left" />
+          <TanStackRouterDevtools position="bottom-right" />
+
+          <Scripts />
+        </AuthUIProvider>
       </body>
     </html>
   );

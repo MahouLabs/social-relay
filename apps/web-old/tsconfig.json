@@ -17,7 +17,6 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "noEmit": true,
-    "strictNullChecks": true
+    "noEmit": true
   }
 }

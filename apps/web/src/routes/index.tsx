@@ -1,24 +1,74 @@
+import ThemeToggle from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
-import { signOut, useSession } from "@/utils/auth-client";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Loader2Icon } from "lucide-react";
+import authClient from "@/utils/auth-client";
+import { Link, createFileRoute, useRouter } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
   component: Home,
+  loader: ({ context }) => {
+    return { user: context.user };
+  },
 });
 
 function Home() {
-  const { data, isPending } = useSession();
-  const navigate = useNavigate();
-
-  if (isPending) return <Loader2Icon className="animate-spin" />;
-
-  if (!data || !data.user) navigate({ to: "/signin" });
+  const { queryClient } = Route.useRouteContext();
+  const { user } = Route.useLoaderData();
+  const router = useRouter();
 
   return (
-    <div className="p-2">
-      <h3>Welcome Home {data?.user.name}!!!</h3>
-      <Button onClick={() => signOut()}>Sign Out</Button>
+    <div className="flex flex-col gap-4 p-6">
+      <h1 className="text-4xl font-bold">TanStarter</h1>
+      <div className="flex items-center gap-2">
+        This is an unprotected page:
+        <pre className="rounded-md border bg-card p-1 text-card-foreground">
+          routes/index.tsx
+        </pre>
+      </div>
+
+      {user ? (
+        <div className="flex flex-col gap-2">
+          <p>Welcome back, {user.name}!</p>
+          <Button type="button" asChild className="w-fit" size="lg">
+            <Link to="/dashboard">Go to Dashboard</Link>
+          </Button>
+          <div>
+            More data:
+            <pre>{JSON.stringify(user, null, 2)}</pre>
+          </div>
+
+          <Button
+            onClick={async () => {
+              await authClient.signOut();
+              await queryClient.invalidateQueries({ queryKey: ["user"] });
+              await router.invalidate();
+            }}
+            type="button"
+            className="w-fit"
+            variant="destructive"
+            size="lg"
+          >
+            Sign out
+          </Button>
+        </div>
+      ) : (
+        <div className="flex flex-col gap-2">
+          <p>You are not signed in.</p>
+          <Button type="button" asChild className="w-fit" size="lg">
+            <Link to="/signin">Sign in</Link>
+          </Button>
+        </div>
+      )}
+
+      <ThemeToggle />
+
+      <a
+        className="text-muted-foreground underline hover:text-foreground"
+        href="https://github.com/dotnize/tanstarter"
+        target="_blank"
+        rel="noreferrer noopener"
+      >
+        dotnize/tanstarter
+      </a>
     </div>
   );
 }
