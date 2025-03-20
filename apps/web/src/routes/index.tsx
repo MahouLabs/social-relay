@@ -1,6 +1,6 @@
 import ThemeToggle from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
-import authClient from "@/utils/auth-client";
+import { authClient } from "@/utils/auth-client";
 import { Link, createFileRoute, useRouter } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({

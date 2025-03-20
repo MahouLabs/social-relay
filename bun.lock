@@ -3,9 +3,6 @@
   "workspaces": {
     "": {
       "name": "social-relay",
-      "dependencies": {
-        "unenv": "^1.10.0",
-      },
       "devDependencies": {
         "@biomejs/biome": "1.9.4",
         "prettier": "^3.5.3",

@@ -16,13 +16,12 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
 import appCss from "@/styles/globals.css?url";
-import authClient from "@/utils/auth-client";
+import { authClient } from "@/utils/auth-client";
 
 const getUser = createServerFn({ method: "GET" }).handler(async () => {
   const { headers } = getWebRequest()!;
   const session = await authClient.getSession({
     fetchOptions: { headers },
-    query: { disableCookieCache: true },
   });
 
   return session?.data?.user || null;
@@ -83,7 +82,6 @@ function RootDocument({ children }: { readonly children: React.ReactNode }) {
         </ScriptOnce>
 
         <AuthUIProvider
-        
           authClient={authClient}
           navigate={(href) => router.navigate({ href })}
           replace={(href) => router.navigate({ href, replace: true })}

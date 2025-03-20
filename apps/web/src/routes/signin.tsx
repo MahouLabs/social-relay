@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import authClient from "@/utils/auth-client";
+import { authClient } from "@/utils/auth-client";
 import { cn } from "@/utils/cn";
 import { AuthCard } from "@daveyplate/better-auth-ui";
 import { createFileRoute, redirect } from "@tanstack/react-router";
@@ -21,7 +21,13 @@ export const Route = createFileRoute("/signin")({
 function AuthPage() {
   return (
     <div className="flex size-full grow flex-col items-center justify-center gap-3">
-      <AuthCard />
+      <AuthCard redirectTo={REDIRECT_URL} />
+
+      <SignInButton
+        provider="google"
+        label="Google"
+        className="bg-[#DB4437] hover:bg-[#DB4437]/80"
+      />
     </div>
   );
 
