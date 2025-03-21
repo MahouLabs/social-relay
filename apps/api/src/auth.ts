@@ -2,6 +2,11 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "./db";
 
+const isProduction = process.env.NODE_ENV === "production";
+const baseUrl = isProduction
+  ? "https://app.social-relay.com"
+  : "http://localhost:3001";
+
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "sqlite",
@@ -11,6 +16,7 @@ export const auth = betterAuth({
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      redirectURI: `${baseUrl}/dashboard`,
     },
   },
 
@@ -24,9 +30,5 @@ export const auth = betterAuth({
     //   });
     // },
   },
-  trustedOrigins: [
-    process.env.NODE_ENV === "production"
-      ? "https://app.social-relay.com"
-      : "http://localhost:3001",
-  ],
+  trustedOrigins: [baseUrl],
 });
