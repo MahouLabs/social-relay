@@ -29,25 +29,6 @@ const redirectToSignin = (location: ParsedLocation) => {
 };
 
 export const Route = createFileRoute("/_auth")({
-  beforeLoad: async ({ location }) => {
-    // redirectToSignin(location)
-
-    // const { cookie } = await getServerSession();
-
-    // const sessionCookie = encodeURIComponent(
-    //   getCookie("better-auth.session_token") ?? "",
-    // );
-
-    // console.log("AAA", cookie);
-
-    // if (!sessionCookie) redirectToSignin(location);
-    // const headers = new Headers({
-    //   Cookie: `better-auth.session_token=${sessionCookie}`,
-    // });
-
-    // const { data } = await getSession({ fetchOptions: { headers } });
-    // if (!data?.user) redirectToSignin(location);
-  },
   component: AuthLayout,
 });
 

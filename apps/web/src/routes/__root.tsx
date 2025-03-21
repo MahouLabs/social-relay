@@ -1,4 +1,4 @@
-import type { QueryClient } from "@tanstack/react-query";
+import { type QueryClient, useQueryClient } from "@tanstack/react-query";
 import {
   HeadContent,
   Link,
@@ -11,14 +11,18 @@ import {
 import { createServerFn } from "@tanstack/react-start";
 import { getWebRequest } from "@tanstack/react-start/server";
 
-import { AuthUIProvider } from "@daveyplate/better-auth-ui";
+import { AuthUIProviderTanstack } from "@daveyplate/better-auth-ui/tanstack";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
+import { Toaster } from "@/lib/components/ui/sonner";
 import appCss from "@/styles/globals.css?url";
 import { authClient } from "@/utils/auth-client";
+import { seo } from "@/utils/seo";
+import { AuthUIProvider } from "@daveyplate/better-auth-ui";
 
 const getUser = createServerFn({ method: "GET" }).handler(async () => {
+  // biome-ignore lint/style/noNonNullAssertion: it does exist
   const { headers } = getWebRequest()!;
   const session = await authClient.getSession({
     fetchOptions: { headers },
@@ -47,9 +51,11 @@ export const Route = createRootRouteWithContext<{
         name: "viewport",
         content: "width=device-width, initial-scale=1",
       },
-      {
+      ...seo({
         title: "Social Relay",
-      },
+        description:
+          "Schedule and post to multiple social media accounts at once with our open source tool. Includes analytics support to track your social media performance.",
+      }),
     ],
     links: [{ rel: "stylesheet", href: appCss }],
   }),
@@ -66,6 +72,7 @@ function RootComponent() {
 
 function RootDocument({ children }: { readonly children: React.ReactNode }) {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   return (
     // suppress since we're updating the "dark" class in a custom script below
@@ -82,19 +89,34 @@ function RootDocument({ children }: { readonly children: React.ReactNode }) {
         </ScriptOnce>
 
         <AuthUIProvider
+          persistClient={false}
+          onSessionChange={() =>
+            queryClient.invalidateQueries({ queryKey: ["user"] })
+          }
           authClient={authClient}
           navigate={(href) => router.navigate({ href })}
           replace={(href) => router.navigate({ href, replace: true })}
           LinkComponent={({ href, to, ...props }) => (
             <Link to={href} {...props} />
           )}
+          providers={["google"]}
+          defaultRedirectTo="/dashboard"
+          colorIcons
+          emailVerification
+          viewPaths={{
+            signIn: "/signin",
+            signUp: "/signup",
+            forgotPassword: "/forgot",
+            resetPassword: "/reset",
+            settings: "/settings",
+          }}
         >
           {children}
 
           <ReactQueryDevtools buttonPosition="bottom-left" />
           <TanStackRouterDevtools position="bottom-right" />
-
           <Scripts />
+          <Toaster />
         </AuthUIProvider>
       </body>
     </html>

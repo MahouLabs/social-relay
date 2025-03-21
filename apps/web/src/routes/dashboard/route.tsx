@@ -9,9 +9,11 @@ import {
 export const Route = createFileRoute("/dashboard")({
   component: DashboardLayout,
   beforeLoad: async ({ context }) => {
-    if (!context.user) {
-      throw redirect({ to: "/signin" });
-    }
+    console.log("RUNNING BEFORE LOAD ON /DASHBOARD", context.user);
+
+    // if (!context.user) {
+    //   throw redirect({ to: "/auth/signin" });
+    // }
 
     // `context.queryClient` is also available in our loaders
     // https://tanstack.com/start/latest/docs/framework/react/examples/start-basic-react-query

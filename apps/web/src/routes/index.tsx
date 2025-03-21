@@ -54,7 +54,7 @@ function Home() {
         <div className="flex flex-col gap-2">
           <p>You are not signed in.</p>
           <Button type="button" asChild className="w-fit" size="lg">
-            <Link to="/signin">Sign in</Link>
+            <Link to="/auth/signin">Sign in</Link>
           </Button>
         </div>
       )}

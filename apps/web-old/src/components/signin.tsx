@@ -39,7 +39,6 @@ export function SignIn() {
           router.history.push(search.redirect ?? "/");
         },
         onError: (ctx) => {
-          console.log({ ctx });
           toast.error(ctx.error.message);
         },
       },
