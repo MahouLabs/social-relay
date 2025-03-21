@@ -6,8 +6,8 @@ import {
   redirect,
 } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/dashboard")({
-  component: DashboardLayout,
+export const Route = createFileRoute("/_app")({
+  component: RouteComponent,
   beforeLoad: async ({ context }) => {
     if (!context.user) {
       throw redirect({ to: "/auth/signin" });
@@ -18,14 +18,14 @@ export const Route = createFileRoute("/dashboard")({
   },
 });
 
-function DashboardLayout() {
+function RouteComponent() {
   return (
     <div className="flex flex-col gap-4 p-4">
-      <h1 className="text-4xl font-bold">Dashboard Layout</h1>
+      <h1 className="text-4xl font-bold">App Layout</h1>
       <div className="flex items-center gap-2">
         This is a protected layout:
         <pre className="rounded-md border bg-card p-1 text-card-foreground">
-          routes/dashboard/route.tsx
+          routes/_app.tsx
         </pre>
       </div>
 
