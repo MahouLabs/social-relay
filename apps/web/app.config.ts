@@ -4,13 +4,6 @@ import { cloudflare } from "unenv";
 import tsConfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
-  server: {
-    preset: "cloudflare-pages",
-    unenv: cloudflare,
-  },
-  tsr: {
-    appDirectory: "src",
-  },
   vite: {
     plugins: [
       tsConfigPaths({
@@ -18,5 +11,30 @@ export default defineConfig({
       }),
       tailwindcss(),
     ],
+  },
+
+  // https://react.dev/learn/react-compiler
+  react: {
+    babel: {
+      plugins: [
+        [
+          "babel-plugin-react-compiler",
+          {
+            target: "19",
+          },
+        ],
+      ],
+    },
+  },
+
+  tsr: {
+    // https://github.com/TanStack/router/discussions/2863#discussioncomment-12458714
+    appDirectory: "./src",
+  },
+
+  server: {
+    // https://tanstack.com/start/latest/docs/framework/react/hosting#deployment
+    preset: "cloudflare-pages",
+    unenv: cloudflare,
   },
 });

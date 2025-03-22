@@ -1,25 +1,17 @@
 import { Link } from "@tanstack/react-router";
+import { Button } from "./ui/button";
 
-export function NotFound({ children }: { children?: React.ReactNode }) {
+export function NotFound() {
   return (
     <div className="space-y-2 p-2">
-      <div className="text-gray-600 dark:text-gray-400">
-        {children || <p>The page you are looking for does not exist.</p>}
-      </div>
-      <p className="flex items-center gap-2 flex-wrap">
-        <button
-          type="button"
-          onClick={() => window.history.back()}
-          className="bg-emerald-500 text-white px-2 py-1 rounded-sm uppercase font-black text-sm"
-        >
+      <p>The page you are looking for does not exist.</p>
+      <p className="flex flex-wrap items-center gap-2">
+        <Button type="button" onClick={() => window.history.back()}>
           Go back
-        </button>
-        <Link
-          to="/"
-          className="bg-cyan-600 text-white px-2 py-1 rounded-sm uppercase font-black text-sm"
-        >
-          Start Over
-        </Link>
+        </Button>
+        <Button asChild variant="secondary">
+          <Link to="/">Home</Link>
+        </Button>
       </p>
     </div>
   );

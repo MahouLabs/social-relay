@@ -1,0 +1,20 @@
+{
+  "$schema": "https://unpkg.com/wrangler@latest/config-schema.json",
+  "name": "social-relay-api",
+  "compatibility_date": "2024-11-13",
+  "compatibility_flags": ["nodejs_compat"],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "social-relay-staging",
+      "database_id": "f3a0fc1f-0dcc-4861-a69f-14d68471eff0",
+      "migrations_dir": "drizzle"
+    },
+    {
+      "binding": "DB",
+      "database_name": "social-relay-prod",
+      "database_id": "your_production_db_id",
+      "migrations_dir": "drizzle"
+    }
+  ]
+}
