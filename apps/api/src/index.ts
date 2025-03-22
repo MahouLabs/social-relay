@@ -1,15 +1,20 @@
+import type { D1Database } from "@cloudflare/workers-types";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { auth } from "./auth";
 import { sessionMiddleware } from "./middleware";
 
-const app = new Hono<{
-  Variables: {
-    user: typeof auth.$Infer.Session.user | null;
-    session: typeof auth.$Infer.Session.session | null;
-  };
-}>();
+type Variables = {
+  user: typeof auth.$Infer.Session.user | null;
+  session: typeof auth.$Infer.Session.session | null;
+};
+
+type Bindings = {
+  DB: D1Database;
+};
+
+const app = new Hono<{ Variables: Variables; Bindings: Bindings }>();
 
 app.use(
   "*",
