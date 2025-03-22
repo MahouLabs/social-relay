@@ -15,7 +15,7 @@ import { AuthUIProviderTanstack } from "@daveyplate/better-auth-ui/tanstack";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
-import { Toaster } from "@/lib/components/ui/sonner";
+import { Toaster } from "@/components/ui/sonner";
 import appCss from "@/styles/globals.css?url";
 import { authClient } from "@/utils/auth-client";
 import { seo } from "@/utils/seo";
@@ -112,7 +112,6 @@ function RootDocument({ children }: { readonly children: React.ReactNode }) {
           }}
         >
           {children}
-
           <ReactQueryDevtools buttonPosition="bottom-left" />
           <TanStackRouterDevtools position="bottom-right" />
           <Scripts />

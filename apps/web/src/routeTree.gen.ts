@@ -13,7 +13,7 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as AuthImport } from './routes/auth'
 import { Route as AppImport } from './routes/_app'
-import { Route as IndexImport } from './routes/index'
+import { Route as AppIndexImport } from './routes/_app.index'
 import { Route as AuthSignupImport } from './routes/auth.signup'
 import { Route as AuthSigninImport } from './routes/auth.signin'
 import { Route as AuthForgotImport } from './routes/auth.forgot'
@@ -32,10 +32,10 @@ const AppRoute = AppImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const IndexRoute = IndexImport.update({
+const AppIndexRoute = AppIndexImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => AppRoute,
 } as any)
 
 const AuthSignupRoute = AuthSignupImport.update({
@@ -66,13 +66,6 @@ const AppDashboardRoute = AppDashboardImport.update({
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
-    }
     '/_app': {
       id: '/_app'
       path: ''
@@ -115,6 +108,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSignupImport
       parentRoute: typeof AuthImport
     }
+    '/_app/': {
+      id: '/_app/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof AppIndexImport
+      parentRoute: typeof AppImport
+    }
   }
 }
 
@@ -122,10 +122,12 @@ declare module '@tanstack/react-router' {
 
 interface AppRouteChildren {
   AppDashboardRoute: typeof AppDashboardRoute
+  AppIndexRoute: typeof AppIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
   AppDashboardRoute: AppDashboardRoute,
+  AppIndexRoute: AppIndexRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
@@ -145,75 +147,71 @@ const AuthRouteChildren: AuthRouteChildren = {
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
   '': typeof AppRouteWithChildren
   '/auth': typeof AuthRouteWithChildren
   '/dashboard': typeof AppDashboardRoute
   '/auth/forgot': typeof AuthForgotRoute
   '/auth/signin': typeof AuthSigninRoute
   '/auth/signup': typeof AuthSignupRoute
+  '/': typeof AppIndexRoute
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '': typeof AppRouteWithChildren
   '/auth': typeof AuthRouteWithChildren
   '/dashboard': typeof AppDashboardRoute
   '/auth/forgot': typeof AuthForgotRoute
   '/auth/signin': typeof AuthSigninRoute
   '/auth/signup': typeof AuthSignupRoute
+  '/': typeof AppIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/': typeof IndexRoute
   '/_app': typeof AppRouteWithChildren
   '/auth': typeof AuthRouteWithChildren
   '/_app/dashboard': typeof AppDashboardRoute
   '/auth/forgot': typeof AuthForgotRoute
   '/auth/signin': typeof AuthSigninRoute
   '/auth/signup': typeof AuthSignupRoute
+  '/_app/': typeof AppIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
     | ''
     | '/auth'
     | '/dashboard'
     | '/auth/forgot'
     | '/auth/signin'
     | '/auth/signup'
+    | '/'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
-    | ''
     | '/auth'
     | '/dashboard'
     | '/auth/forgot'
     | '/auth/signin'
     | '/auth/signup'
+    | '/'
   id:
     | '__root__'
-    | '/'
     | '/_app'
     | '/auth'
     | '/_app/dashboard'
     | '/auth/forgot'
     | '/auth/signin'
     | '/auth/signup'
+    | '/_app/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
   AppRoute: typeof AppRouteWithChildren
   AuthRoute: typeof AuthRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
   AppRoute: AppRouteWithChildren,
   AuthRoute: AuthRouteWithChildren,
 }
@@ -228,18 +226,15 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/",
         "/_app",
         "/auth"
       ]
     },
-    "/": {
-      "filePath": "index.tsx"
-    },
     "/_app": {
       "filePath": "_app.tsx",
       "children": [
-        "/_app/dashboard"
+        "/_app/dashboard",
+        "/_app/"
       ]
     },
     "/auth": {
@@ -265,6 +260,10 @@ export const routeTree = rootRoute
     "/auth/signup": {
       "filePath": "auth.signup.tsx",
       "parent": "/auth"
+    },
+    "/_app/": {
+      "filePath": "_app.index.tsx",
+      "parent": "/_app"
     }
   }
 }

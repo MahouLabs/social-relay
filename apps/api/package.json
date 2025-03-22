@@ -8,7 +8,8 @@
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
     "lint": "biome lint . --apply",
-    "format": "biome format . --write"
+    "format": "biome format . --write",
+    "pg:up": "docker-compose up"
   },
   "dependencies": {
     "@libsql/client": "^0.14.0",

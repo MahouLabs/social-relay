@@ -1,4 +1,14 @@
+import { Sidebar } from "@/components/Sidebar";
 import { Button } from "@/components/ui/button";
+// import {
+//   Sidebar,
+//   SidebarContent,
+//   SidebarHeader,
+//   SidebarMenu,
+//   SidebarMenuButton,
+//   SidebarMenuItem,
+// } from "@/components/ui/sidebar";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import {
   Link,
   Outlet,
@@ -20,20 +30,25 @@ export const Route = createFileRoute("/_app")({
 
 function RouteComponent() {
   return (
-    <div className="flex flex-col gap-4 p-4">
-      <h1 className="text-4xl font-bold">App Layout</h1>
-      <div className="flex items-center gap-2">
-        This is a protected layout:
-        <pre className="rounded-md border bg-card p-1 text-card-foreground">
-          routes/_app.tsx
-        </pre>
-      </div>
-
-      <Button type="button" asChild className="w-fit" size="lg">
-        <Link to="/">Back to Home</Link>
-      </Button>
-
-      <Outlet />
-    </div>
+    <main className="h-screen max-h-screen overflow-y-auto md:overflow-hidden">
+      <SidebarProvider>
+        {/* <AppSidebar /> */}
+        <Sidebar />
+        {/* <Sidebar>
+          <SidebarContent>
+            <SidebarHeader>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuButton>Home</SidebarMenuButton>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            </SidebarHeader>
+          </SidebarContent>
+        </Sidebar> */}
+        <section className="container relative flex w-full flex-col items-center rounded-2xl border-gray-800 px-4 md:m-2 md:h-[calc(100vh-1rem)] md:overflow-y-auto md:border md:px-8 md:shadow-sm">
+          <Outlet />
+        </section>
+      </SidebarProvider>
+    </main>
   );
 }
