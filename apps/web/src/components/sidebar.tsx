@@ -1,3 +1,4 @@
+import { UserButton } from "@daveyplate/better-auth-ui";
 import { Link, useLocation } from "@tanstack/react-router";
 
 export function Sidebar() {
@@ -43,6 +44,8 @@ export function Sidebar() {
           </Link>
         </li>
       </ul>
+
+      <UserButton />
     </nav>
   );
 }
