@@ -1,9 +1,8 @@
-import "dotenv/config";
 import { drizzle } from "drizzle-orm/d1";
+import type { Context } from "hono";
+import type { AppBindings } from "..";
 import * as schema from "./schema";
 
-if (!process.env.DATABASE_URL) {
-  throw new Error("DATABASE_URL environment variable is not set");
+export function getDb(c: Context<AppBindings>) {
+  return drizzle(c.env.DB, { schema });
 }
-
-export const db = drizzle(process.env.DATABASE_URL, { schema });

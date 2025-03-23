@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
-    "dev": "turbo run dev db:studio pg:up",
+    "dev": "turbo run dev",
     "lint": "turbo run lint",
     "format": "turbo run format",
     "check-types": "turbo run check-types",
