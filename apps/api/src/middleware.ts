@@ -1,7 +1,8 @@
 import { createMiddleware } from "hono/factory";
-import { auth } from "./auth";
+import { getAuth } from "./auth";
 
 export const sessionMiddleware = createMiddleware(async (c, next) => {
+  const auth = getAuth(c);
   const session = await auth.api.getSession({ headers: c.req.raw.headers });
 
   if (!session) {

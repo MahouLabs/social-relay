@@ -1,9 +1,8 @@
 {
-  "$schema": "https://unpkg.com/wrangler@latest/config-schema.json",
+  "$schema": "node_modules/wrangler/config-schema.json",
   "name": "social-relay-api",
-  "main": "server.js",
-  "compatibility_date": "2024-11-13",
-  "compatibility_flags": ["nodejs_compat"],
+  "main": "src/index.ts",
+  "compatibility_date": "2025-03-22",
   "d1_databases": [
     {
       "binding": "DB",

@@ -1,28 +1,23 @@
 {
   "name": "social-relay-api",
   "scripts": {
-    "build": "bun build --production --target=bun --outfile=server.js ./src/index.ts",
-    "start": "bun run server.js",
-    "dev": "bun run --hot src/index.ts",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy --minify",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
     "lint": "biome lint . --apply",
-    "format": "biome format . --write",
-    "pg:up": "docker-compose up"
+    "format": "biome format . --write"
   },
   "dependencies": {
-    "@libsql/client": "^0.14.0",
     "better-auth": "^1.2.4",
     "drizzle-orm": "^0.40.0",
-    "hono": "^4.7.4"
+    "hono": "^4.7.5"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250321.0",
-    "@types/bun": "^1.2.5",
-    "bun-types": "^1.2.5",
-    "dotenv": "^16.4.7",
-    "drizzle-kit": "^0.30.5"
+    "drizzle-kit": "^0.30.5",
+    "wrangler": "^4.4.0"
   },
   "packageManager": "bun@1.2.5"
 }
