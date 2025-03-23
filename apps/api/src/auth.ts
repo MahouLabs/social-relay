@@ -22,11 +22,11 @@ export function getAuth(c: Context<AppBindings>) {
       //   });
       // },
     },
-    // socialProviders: {
-    //   google: {
-    //     clientId: c.env.AUTH_GOOGLE_CLIENT_ID,
-    //     clientSecret: c.env.AUTH_GOOGLE_CLIENT_SECRET,
-    //   },
-    // },
+    socialProviders: {
+      google: {
+        clientId: c.env.AUTH_GOOGLE_CLIENT_ID,
+        clientSecret: c.env.AUTH_GOOGLE_CLIENT_SECRET,
+      },
+    },
   });
 }

@@ -103,13 +103,8 @@ function RootDocument({ children }: { readonly children: React.ReactNode }) {
           defaultRedirectTo="/dashboard"
           colorIcons
           emailVerification
-          viewPaths={{
-            signIn: "/signin",
-            signUp: "/signup",
-            forgotPassword: "/forgot",
-            resetPassword: "/reset",
-            settings: "/settings",
-          }}
+          nameRequired
+          rememberMe
         >
           {children}
           <ReactQueryDevtools buttonPosition="bottom-left" />
