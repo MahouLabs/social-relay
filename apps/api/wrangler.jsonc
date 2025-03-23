@@ -3,6 +3,10 @@
   "name": "social-relay-api",
   "main": "src/index.ts",
   "compatibility_date": "2025-03-22",
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  },
   "d1_databases": [
     {
       "binding": "DB",
