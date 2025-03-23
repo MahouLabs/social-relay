@@ -28,7 +28,7 @@ const getUser = createServerFn({ method: "GET" }).handler(async () => {
     fetchOptions: { headers },
   });
 
-  console.log(session, session.data?.user);
+  console.log({ headers }, { session });
 
   return session?.data?.user || null;
 });
