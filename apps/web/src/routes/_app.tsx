@@ -20,6 +20,7 @@ export const Route = createFileRoute("/_app")({
   component: RouteComponent,
   beforeLoad: async ({ context }) => {
     if (!context.user) {
+      // @ts-ignore
       throw redirect({ to: "/auth/signin" });
     }
 

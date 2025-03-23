@@ -1,4 +1,4 @@
-import { AuthCard } from "@daveyplate/better-auth-ui";
+import { AuthCard, type AuthView } from "@daveyplate/better-auth-ui";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/auth/$pathname")({
@@ -12,12 +12,20 @@ export const Route = createFileRoute("/auth/$pathname")({
   },
 });
 
+const pathnameToViewMap: Record<string, AuthView> = {
+  signin: "signIn",
+  signup: "signUp",
+  forgot: "forgotPassword",
+  reset: "resetPassword",
+};
+
 function RouteComponent() {
   const { pathname } = Route.useParams();
+  const view = pathnameToViewMap[pathname] || "signin";
 
   return (
     <main className="flex h-screen w-full items-center justify-center">
-      <AuthCard pathname={pathname}  />
+      <AuthCard view={view} />
     </main>
   );
 }

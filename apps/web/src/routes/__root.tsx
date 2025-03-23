@@ -101,6 +101,12 @@ function RootDocument({ children }: { readonly children: React.ReactNode }) {
           )}
           providers={["google"]}
           defaultRedirectTo="/dashboard"
+          viewPaths={{
+            signIn: "/signin",
+            signUp: "/signup",
+            forgotPassword: "/forgot",
+            resetPassword: "/reset",
+          }}
           colorIcons
           emailVerification
           nameRequired
