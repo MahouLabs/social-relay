@@ -3,6 +3,7 @@ import { type Env, Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { getAuth } from "./auth";
+import getDb, { users } from "./db";
 import { sessionMiddleware } from "./middleware";
 
 type Auth = ReturnType<typeof getAuth>;
@@ -38,16 +39,11 @@ app.use(logger());
 app.use("*", sessionMiddleware);
 
 app.get("/", async (c) => {
-  const result = await c.env.DB.prepare("SELECT * FROM users").bind().all();
+  const result = await getDb(c).select().from(users);
   console.log("RESULT:", result);
   return c.text("Hello Hono!");
 });
 
-app.on(["POST", "GET"], "/api/auth/**", (c) => {
-  console.log("DB:", c.env.DB);
-  console.log("AUTH:", getAuth(c));
-  return getAuth(c).handler(c.req.raw);
-});
-// app.on(["POST", "GET"], "/api/auth/**", (c) => getAuth(c).handler(c.req.raw));
+app.on(["POST", "GET"], "/api/auth/**", (c) => getAuth(c).handler(c.req.raw));
 
 export default app;

@@ -2,8 +2,7 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import type { Context } from "hono";
 import type { AppBindings } from ".";
-import { getDb } from "./db";
-import * as schema from "./db/schema";
+import getDb, * as schema from "./db";
 
 export function getAuth(c: Context<AppBindings>) {
   return betterAuth({
