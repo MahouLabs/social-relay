@@ -22,14 +22,14 @@ import { seo } from "@/utils/seo";
 import { AuthUIProvider } from "@daveyplate/better-auth-ui";
 
 const getUser = createServerFn({ method: "GET" }).handler(async () => {
-  // biome-ignore lint/style/noNonNullAssertion: it does exist
-  const { headers } = getWebRequest()!;
-  const headers2 = getHeaders();
+  const headersMap = getHeaders();
+  // @ts-ignore
+  const headers = new Headers(headersMap);
   const session = await authClient.getSession({
     fetchOptions: { headers },
   });
 
-  console.log({ headers }, { headers2 }, { session });
+  console.log({ headers }, { headersMap }, { session });
 
   return session?.data?.user || null;
 });
