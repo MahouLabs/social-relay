@@ -28,8 +28,7 @@ const getUser = createServerFn({ method: "GET" }).handler(async () => {
   const session = await authClient.getSession({
     fetchOptions: { headers, credentials: "include" },
   });
-  console.log("headers", JSON.stringify(headers));
-  console.log("session", JSON.stringify(session));
+
   return session.data?.user ?? null;
 });
 
