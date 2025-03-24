@@ -22,41 +22,24 @@ import { authClient } from "@/utils/auth-client";
 import { seo } from "@/utils/seo";
 import { AuthUIProvider } from "@daveyplate/better-auth-ui";
 
-export const getUser = createServerFn({ method: "GET" }).handler(async () => {
+const getUser = createServerFn({ method: "GET" }).handler(async () => {
   // biome-ignore lint/style/noNonNullAssertion: it does exist
-  // const { headers } = getWebRequest()!;
-
-  const headersPartial = getHeaders();
-  const headers = new Headers(
-    Object.fromEntries(
-      Object.entries(headersPartial).filter(([_, v]) => v !== undefined),
-    ) as Record<string, string>,
-  );
-  const session = await authClient.getSession({
-    fetchOptions: { headers },
-  });
-
-  console.log({ headers }, { session });
-
-  if (!session.data?.user) {
-    // @ts-ignore
-    throw redirect({ to: "/auth/signin" });
-  }
-
-  return session.data.user;
+  const { headers } = getWebRequest()!;
+  const session = await authClient.getSession({ fetchOptions: { headers } });
+  return session.data?.user ?? null;
 });
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
   user: Awaited<ReturnType<typeof getUser>>;
 }>()({
-  // beforeLoad: async ({ context }) => {
-  //   const user = await context.queryClient.fetchQuery({
-  //     queryKey: ["user"],
-  //     queryFn: ({ signal }) => getUser({ signal }),
-  //   }); // we're using react-query for caching, see router.tsx
-  //   return { user };
-  // },
+  beforeLoad: async ({ context }) => {
+    const user = await context.queryClient.fetchQuery({
+      queryKey: ["user"],
+      queryFn: ({ signal }) => getUser({ signal }),
+    }); // we're using react-query for caching, see router.tsx
+    return { user };
+  },
   head: () => ({
     meta: [
       {

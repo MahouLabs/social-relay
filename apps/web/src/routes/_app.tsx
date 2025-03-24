@@ -15,32 +15,31 @@ import {
   createFileRoute,
   redirect,
 } from "@tanstack/react-router";
-import { getUser } from "./__root";
-import { useQuery } from "@tanstack/react-query";
+// import { useQuery } from "@tanstack/react-query";
 
 export const Route = createFileRoute("/_app")({
   component: RouteComponent,
-  // beforeLoad: async ({ context }) => {
-  //   if (!context.user) {
-  //     // @ts-ignore
-  //     throw redirect({ to: "/auth/signin" });
-  //   }
+  beforeLoad: async ({ context }) => {
+    if (!context.user) {
+      // @ts-ignore
+      throw redirect({ to: "/auth/signin" });
+    }
 
-  //   // `context.queryClient` is also available in our loaders
-  //   // https://tanstack.com/start/latest/docs/framework/react/examples/start-basic-react-query
-  //   // https://tanstack.com/router/latest/docs/framework/react/guide/external-data-loading
-  // },
+    // `context.queryClient` is also available in our loaders
+    // https://tanstack.com/start/latest/docs/framework/react/examples/start-basic-react-query
+    // https://tanstack.com/router/latest/docs/framework/react/guide/external-data-loading
+  },
 });
 
 function RouteComponent() {
-  const { isLoading } = useQuery({
-    queryKey: ["user"],
-    queryFn: () => getUser(),
-  });
+  // const { isLoading } = useQuery({
+  //   queryKey: ["user"],
+  //   queryFn: () => authClient.getSession(),
+  // });
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+  // }
 
   return (
     <main className="h-screen max-h-screen overflow-y-auto md:overflow-hidden">
