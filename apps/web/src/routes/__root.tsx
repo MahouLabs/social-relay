@@ -7,6 +7,7 @@ import {
   Scripts,
   createRootRouteWithContext,
   useRouter,
+  redirect,
 } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import { getWebRequest, getHeaders } from "@tanstack/react-start/server";
@@ -22,16 +23,13 @@ import { seo } from "@/utils/seo";
 import { AuthUIProvider } from "@daveyplate/better-auth-ui";
 
 const getUser = createServerFn({ method: "GET" }).handler(async () => {
-  const headersMap = getHeaders();
-  // @ts-ignore
-  const headers = new Headers(headersMap);
+  // biome-ignore lint/style/noNonNullAssertion: it does exist
+  const { headers } = getWebRequest()!;
   const session = await authClient.getSession({
-    fetchOptions: { headers },
+    fetchOptions: { headers, credentials: "include" },
   });
 
-  console.log({ headers }, { headersMap }, { session });
-
-  return session?.data?.user || null;
+  return session.data?.user ?? null;
 });
 
 export const Route = createRootRouteWithContext<{

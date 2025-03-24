@@ -15,6 +15,7 @@ import {
   createFileRoute,
   redirect,
 } from "@tanstack/react-router";
+// import { useQuery } from "@tanstack/react-query";
 
 export const Route = createFileRoute("/_app")({
   component: RouteComponent,
@@ -31,6 +32,15 @@ export const Route = createFileRoute("/_app")({
 });
 
 function RouteComponent() {
+  // const { isLoading } = useQuery({
+  //   queryKey: ["user"],
+  //   queryFn: () => authClient.getSession(),
+  // });
+
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+  // }
+
   return (
     <main className="h-screen max-h-screen overflow-y-auto md:overflow-hidden">
       <SidebarProvider>

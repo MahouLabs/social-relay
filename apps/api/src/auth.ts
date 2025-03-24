@@ -28,5 +28,11 @@ export function getAuth(c: Context<AppBindings>) {
         clientSecret: c.env.AUTH_GOOGLE_CLIENT_SECRET,
       },
     },
+    advanced: {
+      crossSubDomainCookies: {
+        enabled: true,
+        domain: ".social-relay.com",
+      },
+    },
   });
 }
