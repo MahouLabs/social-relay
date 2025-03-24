@@ -9,7 +9,11 @@ import {
   useRouter,
 } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
-import { getWebRequest, getHeaders } from "@tanstack/react-start/server";
+import {
+  getWebRequest,
+  getHeaders,
+  getCookie,
+} from "@tanstack/react-start/server";
 
 import { AuthUIProviderTanstack } from "@daveyplate/better-auth-ui/tanstack";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -22,14 +26,16 @@ import { seo } from "@/utils/seo";
 import { AuthUIProvider } from "@daveyplate/better-auth-ui";
 
 const getUser = createServerFn({ method: "GET" }).handler(async () => {
-  const headersMap = getHeaders();
-  // @ts-ignore
-  const headers = new Headers(headersMap);
+  // const headersMap = getHeaders();
   const session = await authClient.getSession({
-    fetchOptions: { headers },
+    fetchOptions: {
+      headers: {
+        cookie: `better-auth.session_token=${getCookie("better-auth.session_token")}`,
+      },
+    },
   });
 
-  console.log({ headers }, { headersMap }, { session });
+  console.log({ sessionToken: getCookie("better-auth.session_token") });
 
   return session?.data?.user || null;
 });
