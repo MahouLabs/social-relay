@@ -9,7 +9,7 @@ import {
   useRouter,
 } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
-import { getWebRequest } from "@tanstack/react-start/server";
+import { getWebRequest, getHeaders } from "@tanstack/react-start/server";
 
 import { AuthUIProviderTanstack } from "@daveyplate/better-auth-ui/tanstack";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -24,11 +24,12 @@ import { AuthUIProvider } from "@daveyplate/better-auth-ui";
 const getUser = createServerFn({ method: "GET" }).handler(async () => {
   // biome-ignore lint/style/noNonNullAssertion: it does exist
   const { headers } = getWebRequest()!;
+  const headers2 = getHeaders();
   const session = await authClient.getSession({
     fetchOptions: { headers },
   });
 
-  console.log({ headers }, { session });
+  console.log({ headers }, { headers2 }, { session });
 
   return session?.data?.user || null;
 });
