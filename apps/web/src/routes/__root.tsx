@@ -7,13 +7,10 @@ import {
   Scripts,
   createRootRouteWithContext,
   useRouter,
+  redirect,
 } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
-import {
-  getWebRequest,
-  getHeaders,
-  getCookie,
-} from "@tanstack/react-start/server";
+import { getWebRequest, getHeaders } from "@tanstack/react-start/server";
 
 import { AuthUIProviderTanstack } from "@daveyplate/better-auth-ui/tanstack";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -25,32 +22,34 @@ import { authClient } from "@/utils/auth-client";
 import { seo } from "@/utils/seo";
 import { AuthUIProvider } from "@daveyplate/better-auth-ui";
 
-const getUser = createServerFn({ method: "GET" }).handler(async () => {
-  // const headersMap = getHeaders();
+export const getUser = createServerFn({ method: "GET" }).handler(async () => {
+  // biome-ignore lint/style/noNonNullAssertion: it does exist
+  const { headers } = getWebRequest()!;
   const session = await authClient.getSession({
-    fetchOptions: {
-      headers: {
-        cookie: `better-auth.session_token=${getCookie("better-auth.session_token")}`,
-      },
-    },
+    fetchOptions: { headers },
   });
 
-  console.log({ sessionToken: getCookie("better-auth.session_token") });
+  console.log({ headers }, { session });
 
-  return session?.data?.user || null;
+  if (!session.data?.user) {
+    // @ts-ignore
+    throw redirect({ to: "/auth/signin" });
+  }
+
+  return session.data.user;
 });
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
   user: Awaited<ReturnType<typeof getUser>>;
 }>()({
-  beforeLoad: async ({ context }) => {
-    const user = await context.queryClient.fetchQuery({
-      queryKey: ["user"],
-      queryFn: ({ signal }) => getUser({ signal }),
-    }); // we're using react-query for caching, see router.tsx
-    return { user };
-  },
+  // beforeLoad: async ({ context }) => {
+  //   const user = await context.queryClient.fetchQuery({
+  //     queryKey: ["user"],
+  //     queryFn: ({ signal }) => getUser({ signal }),
+  //   }); // we're using react-query for caching, see router.tsx
+  //   return { user };
+  // },
   head: () => ({
     meta: [
       {
