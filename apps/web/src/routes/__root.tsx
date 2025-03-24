@@ -24,7 +24,14 @@ import { AuthUIProvider } from "@daveyplate/better-auth-ui";
 
 export const getUser = createServerFn({ method: "GET" }).handler(async () => {
   // biome-ignore lint/style/noNonNullAssertion: it does exist
-  const { headers } = getWebRequest()!;
+  // const { headers } = getWebRequest()!;
+
+  const headersPartial = getHeaders();
+  const headers = new Headers(
+    Object.fromEntries(
+      Object.entries(headersPartial).filter(([_, v]) => v !== undefined),
+    ) as Record<string, string>,
+  );
   const session = await authClient.getSession({
     fetchOptions: { headers },
   });
