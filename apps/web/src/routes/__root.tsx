@@ -19,7 +19,7 @@ import appCss from "@/styles/globals.css?url";
 import { seo } from "@/utils/seo";
 import { getCloudflareContext } from "@/utils/cloudflare-helpers";
 import { AuthUIProvider } from "@daveyplate/better-auth-ui";
-import authClient from "@/auth-client";
+import authClient from "@/utils/auth-client";
 import { Toaster } from "@/components/ui/sonner";
 
 const getUser = createServerFn({ method: "GET" }).handler(async () => {
@@ -86,7 +86,7 @@ function RootDocument({ children }: { readonly children: React.ReactNode }) {
 					{`document.documentElement.classList.toggle(
             'dark',
             localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
-            )`}
+          )`}
 				</ScriptOnce>
 
 				<AuthUIProvider
@@ -102,12 +102,6 @@ function RootDocument({ children }: { readonly children: React.ReactNode }) {
 					)}
 					providers={["google"]}
 					defaultRedirectTo="/dashboard"
-					viewPaths={{
-						signIn: "/signin",
-						signUp: "/signup",
-						forgotPassword: "/forgot",
-						resetPassword: "/reset",
-					}}
 					colorIcons
 					emailVerification
 					nameRequired
