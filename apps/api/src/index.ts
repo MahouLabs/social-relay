@@ -39,8 +39,6 @@ app.use(logger());
 app.use("*", sessionMiddleware);
 
 app.get("/", async (c) => {
-  const result = await getDb(c).select().from(users);
-  console.log("RESULT:", result);
   return c.text("Hello Hono!");
 });
 

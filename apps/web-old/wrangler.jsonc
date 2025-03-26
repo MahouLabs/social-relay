@@ -1,0 +1,28 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "social-relay-web",
+  "pages_build_output_dir": "./dist",
+  "compatibility_flags": ["nodejs_compat"],
+  "compatibility_date": "2024-11-13",
+  "vars": {
+    "VITE_API_URL": "https://api.social-relay.com"
+  }
+}
+
+// {
+//   "$schema": "../../node_modules/wrangler/config-schema.json",
+//   "compatibility_flags": ["nodejs_compat"],
+//   "compatibility_date":"2025-03-24",
+//   "main": ".output/server/index.mjs",
+//     "vars": {
+//     "VITE_API_URL": "https://api.social-relay.com"
+//   },
+//   "observability": {
+//     "enabled": true,
+//     "head_sampling_rate": 1
+//   },
+//   "assets": {
+//     "directory": "./.output/public/",
+//     "binding": "ASSETS"
+//   },
+// }
