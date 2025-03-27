@@ -12,6 +12,8 @@
 		"format": "biome format . --write"
 	},
 	"dependencies": {
+		"@hono/trpc-server": "^0.3.4",
+		"@trpc/server": "^11.0.0",
 		"better-auth": "^1.2.5",
 		"drizzle-orm": "^0.40.1",
 		"hono": "^4.7.5"

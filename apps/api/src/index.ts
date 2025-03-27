@@ -1,11 +1,14 @@
 import type { D1Database } from "@cloudflare/workers-types";
+import { trpcServer } from "@hono/trpc-server";
 import { type Env, Hono } from "hono";
 import { env } from "hono/adapter";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { getAuth } from "./auth";
-import getDb, { users } from "./db";
-import { sessionMiddleware } from "./middleware";
+import { corsMiddleware } from "./middlewares/cors";
+import { csrfMiddleware } from "./middlewares/csrf";
+import { sessionMiddleware } from "./middlewares/session";
+import { appRouter } from "./trpc";
 
 type Auth = ReturnType<typeof getAuth>;
 
@@ -25,16 +28,11 @@ export interface AppBindings extends Env {
 
 const app = new Hono<AppBindings>();
 
-app.use(
-	"*",
-	cors({
-		origin: "https://app.social-relay.com",
-		allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-		allowHeaders: ["Content-Type", "Authorization"],
-		credentials: true,
-		maxAge: 600,
-	}),
-);
+app
+	.use(corsMiddleware)
+	.use(csrfMiddleware)
+	.use(sessionMiddleware)
+	.use("/trpc/*", trpcServer({ router: appRouter }));
 
 app.use(logger());
 app.use("*", sessionMiddleware);

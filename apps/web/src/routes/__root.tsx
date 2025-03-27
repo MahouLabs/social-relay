@@ -1,5 +1,9 @@
 import { AuthUIProvider } from "@daveyplate/better-auth-ui";
-import { type QueryClient, useQueryClient } from "@tanstack/react-query";
+import {
+	type QueryClient,
+	useQuery,
+	useQueryClient,
+} from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import {
 	createRootRouteWithContext,
@@ -14,17 +18,21 @@ import {
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { createIsomorphicFn, createServerFn } from "@tanstack/react-start";
 import { getHeaders, getWebRequest } from "@tanstack/react-start/server";
+import type { createTRPCClient } from "@trpc/client";
+import type { createTRPCOptionsProxy } from "@trpc/tanstack-react-query";
 import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/sonner";
 import appCss from "@/styles/globals.css?url";
 import { authClient } from "@/utils/auth-client";
 import { seo } from "@/utils/seo";
+import { useTRPC } from "@/utils/trpc";
+import type { AppRouter } from "../../../api/src/trpc";
 
 // const headers = createIsomorphicFn()
 //     .client(() => ({}))
 //     .server(() => getHeaders());
 
-// const trpcClient = createTRPCClient<TRPCRouter>({
+// const trpcClient = createTRPCClient<AppRouter>({
 //     links: [
 //         httpBatchLink({
 //             // ...
@@ -50,8 +58,13 @@ const getUser = createServerFn({ method: "GET" }).handler(async () => {
 
 export const Route = createRootRouteWithContext<{
 	queryClient: QueryClient;
+	trpc: ReturnType<typeof createTRPCOptionsProxy<AppRouter>>;
+	trpcClient: ReturnType<typeof createTRPCClient<AppRouter>>;
 	user: Awaited<ReturnType<typeof getUser>>;
 }>()({
+	beforeLoad: async ({ context: { trpc, queryClient } }) => {
+		await queryClient.ensureQueryData(trpc.hello.queryOptions());
+	},
 	// beforeLoad: async ({ context }) => {
 	// 	const user = await context.queryClient.fetchQuery({
 	// 		queryKey: ["user"],
@@ -99,6 +112,10 @@ function RootComponent() {
 function RootDocument({ children }: { readonly children: React.ReactNode }) {
 	const router = useRouter();
 	const queryClient = useQueryClient();
+	const trpc = useTRPC();
+	const helloQuery = useQuery(trpc.hello.queryOptions());
+
+	console.log({ helloQuery });
 
 	return (
 		// suppress since we're updating the "dark" class in a custom script below
