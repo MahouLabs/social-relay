@@ -4,6 +4,13 @@ import { cloudflare } from "unenv";
 import tsConfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
+	tsr: {
+		appDirectory: "./src",
+	},
+	server: {
+		preset: "cloudflare-pages",
+		unenv: cloudflare,
+	},
 	vite: {
 		plugins: [
 			tsConfigPaths({
@@ -12,7 +19,6 @@ export default defineConfig({
 			tailwindcss(),
 		],
 	},
-
 	// https://react.dev/learn/react-compiler
 	react: {
 		babel: {
@@ -25,16 +31,5 @@ export default defineConfig({
 				],
 			],
 		},
-	},
-
-	tsr: {
-		// https://github.com/TanStack/router/discussions/2863#discussioncomment-12458714
-		appDirectory: "./src",
-	},
-
-	server: {
-		// https://tanstack.com/start/latest/docs/framework/react/hosting#deployment
-		preset: "cloudflare-pages",
-		unenv: cloudflare,
 	},
 });
