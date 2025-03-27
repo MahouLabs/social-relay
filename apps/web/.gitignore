@@ -17,6 +17,5 @@ dist
 /api/
 /server/build
 /public/build
-.dev.vars
 
 app.config.timestamp_*.js

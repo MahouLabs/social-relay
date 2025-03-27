@@ -8,43 +8,45 @@ import { Button } from "@/components/ui/button";
 //   SidebarMenuButton,
 //   SidebarMenuItem,
 // } from "@/components/ui/sidebar";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import {
-	Link,
-	Outlet,
-	createFileRoute,
-	redirect,
+  Link,
+  Outlet,
+  createFileRoute,
+  redirect,
 } from "@tanstack/react-router";
 // import { useQuery } from "@tanstack/react-query";
 
 export const Route = createFileRoute("/_app")({
-	component: RouteComponent,
-	beforeLoad: async ({ context }) => {
-		if (!context.user) {
-			// @ts-ignore
-			throw redirect({ to: "/auth/sign-in" });
-		}
+  component: RouteComponent,
+  beforeLoad: async ({ context }) => {
+    if (!context.user) {
+      // @ts-ignore
+      throw redirect({ to: "/auth/signin" });
+    }
 
-		// `context.queryClient` is also available in our loaders
-		// https://tanstack.com/start/latest/docs/framework/react/examples/start-basic-react-query
-		// https://tanstack.com/router/latest/docs/framework/react/guide/external-data-loading
-	},
+    // `context.queryClient` is also available in our loaders
+    // https://tanstack.com/start/latest/docs/framework/react/examples/start-basic-react-query
+    // https://tanstack.com/router/latest/docs/framework/react/guide/external-data-loading
+  },
 });
 
 function RouteComponent() {
-	// const { isLoading } = useQuery({
-	//   queryKey: ["user"],
-	//   queryFn: () => authClient.getSession(),
-	// });
+  // const { isLoading } = useQuery({
+  //   queryKey: ["user"],
+  //   queryFn: () => authClient.getSession(),
+  // });
 
-	// if (isLoading) {
-	//   return <div>Loading...</div>;
-	// }
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+  // }
 
-	return (
-		<main className="h-screen flex max-h-screen overflow-y-auto md:overflow-hidden">
-			{/* <SidebarProvider> */}
-			{/* <AppSidebar /> */}
-			{/* <Sidebar>
+  return (
+    <main className="h-screen max-h-screen overflow-y-auto md:overflow-hidden">
+      <SidebarProvider>
+        {/* <AppSidebar /> */}
+        <Sidebar />
+        {/* <Sidebar>
           <SidebarContent>
             <SidebarHeader>
               <SidebarMenu>
@@ -55,11 +57,10 @@ function RouteComponent() {
             </SidebarHeader>
           </SidebarContent>
         </Sidebar> */}
-			<Sidebar />
-			<section className="container relative flex w-full flex-col items-center rounded-2xl border-gray-800 px-4 md:m-2 md:h-[calc(100vh-1rem)] md:overflow-y-auto md:border md:px-8 md:shadow-sm">
-				<Outlet />
-			</section>
-			{/* </SidebarProvider> */}
-		</main>
-	);
+        <section className="container relative flex w-full flex-col items-center rounded-2xl border-gray-800 px-4 md:m-2 md:h-[calc(100vh-1rem)] md:overflow-y-auto md:border md:px-8 md:shadow-sm">
+          <Outlet />
+        </section>
+      </SidebarProvider>
+    </main>
+  );
 }

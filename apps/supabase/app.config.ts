@@ -1,7 +1,7 @@
-import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "@tanstack/react-start/config";
-import { cloudflare } from "unenv";
 import tsConfigPaths from "vite-tsconfig-paths";
+import tailwindcss from "@tailwindcss/vite";
+import { cloudflare } from "unenv";
 
 export default defineConfig({
 	vite: {
@@ -28,13 +28,11 @@ export default defineConfig({
 	},
 
 	tsr: {
-		// https://github.com/TanStack/router/discussions/2863#discussioncomment-12458714
 		appDirectory: "./src",
 	},
 
 	server: {
-		// https://tanstack.com/start/latest/docs/framework/react/hosting#deployment
-		preset: "cloudflare-pages",
+		preset: "cloudflare-module",
 		unenv: cloudflare,
 	},
 });
