@@ -22,6 +22,7 @@ import type { createTRPCClient } from "@trpc/client";
 import type { createTRPCOptionsProxy } from "@trpc/tanstack-react-query";
 import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import appCss from "@/styles/globals.css?url";
 import { authClient } from "@/utils/auth-client";
 import { seo } from "@/utils/seo";
@@ -147,7 +148,7 @@ function RootDocument({ children }: { readonly children: React.ReactNode }) {
 					nameRequired
 					rememberMe
 				>
-					{children}
+					<TooltipProvider>{children}</TooltipProvider>
 					<ReactQueryDevtools buttonPosition="bottom-left" />
 					<TanStackRouterDevtools position="bottom-right" />
 					<Scripts />

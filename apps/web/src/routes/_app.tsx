@@ -23,23 +23,14 @@ export const Route = createFileRoute("/_app")({
 });
 
 function RouteComponent() {
-	// const { isLoading } = useQuery({
-	//   queryKey: ["user"],
-	//   queryFn: () => authClient.getSession(),
-	// });
-
-	// if (isLoading) {
-	//   return <div>Loading...</div>;
-	// }
-
 	return (
 		<>
 			<RedirectToSignIn />
 
 			<SignedIn>
-				<main className="h-screen max-h-screen overflow-y-auto md:overflow-hidden">
+				<main className="h-screen max-h-screen overflow-y-auto md:overflow-hidden flex">
 					<Sidebar />
-					<section className="container relative flex w-full flex-col items-center rounded-2xl border-gray-800 px-4 md:m-2 md:h-[calc(100vh-1rem)] md:overflow-y-auto md:border md:px-8 md:shadow-sm">
+					<section className="container relative flex w-full flex-col items-center rounded-2xl border-gray-800 px-4 md:ml-0 md:m-2 md:h-[calc(100vh-1rem)] md:overflow-y-auto md:border md:px-8 md:shadow-sm">
 						<Outlet />
 					</section>
 				</main>
