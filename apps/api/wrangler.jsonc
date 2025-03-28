@@ -8,7 +8,8 @@
     "head_sampling_rate": 1
   },
   "vars": {
-    "BETTER_AUTH_URL": "https://api.social-relay.com"
+    "BETTER_AUTH_URL": "https://api.social-relay.com",
+    "ENVIRONMENT": "production"
   },
   "d1_databases": [
     {

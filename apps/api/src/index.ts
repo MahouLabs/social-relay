@@ -13,8 +13,9 @@ type Auth = ReturnType<typeof getAuth>;
 
 export interface AppBindings extends Env {
 	Bindings: {
-		AUTH_URL: string;
-		AUTH_SECRET: string;
+		ENVIRONMENT: string;
+		BETTER_AUTH_URL: string;
+		BETTER_AUTH_SECRET: string;
 		AUTH_GOOGLE_CLIENT_ID: string;
 		AUTH_GOOGLE_CLIENT_SECRET: string;
 		DB: D1Database;
@@ -35,17 +36,9 @@ app
 	.use("/trpc/*", trpcServer({ router: appRouter }));
 
 app.get("/", async (c) => {
-	console.log("--- REACHED API ---");
 	return c.text("Hello Hono!");
 });
 
-app.on(["POST", "GET"], "/auth/**", (c) => {
-	console.log({ raw: c.req.raw });
-	return getAuth(c).handler(c.req.raw);
-});
-
-// app.on("GET", "/user", (c) => {
-// 	return c.json({ user: c.get("user") });
-// });
+app.on(["POST", "GET"], "/auth/**", (c) => getAuth(c).handler(c.req.raw));
 
 export default app;

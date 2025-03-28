@@ -6,9 +6,14 @@ import getDb from "./db";
 import * as schema from "./schema";
 
 export function getAuth(c: Context<AppBindings>) {
+	const isProduction = c.env.ENVIRONMENT === "production";
+
 	return betterAuth({
-		trustedOrigins: ["http://localhost:3001", "https://app.social-relay.com"],
+		trustedOrigins: isProduction
+			? ["https://app.social-relay.com"]
+			: ["http://localhost:3001"],
 		basePath: "/auth",
+		baseUrl: c.env.BETTER_AUTH_URL,
 		database: drizzleAdapter(getDb(c), {
 			schema,
 			provider: "sqlite",
@@ -32,7 +37,7 @@ export function getAuth(c: Context<AppBindings>) {
 		},
 		advanced: {
 			crossSubDomainCookies: {
-				enabled: true,
+				enabled: isProduction,
 				domain: ".social-relay.com",
 			},
 		},

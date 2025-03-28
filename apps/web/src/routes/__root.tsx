@@ -1,4 +1,4 @@
-import { AuthUIProvider } from "@daveyplate/better-auth-ui";
+import { AuthUIProviderTanstack } from "@daveyplate/better-auth-ui/tanstack";
 import {
 	type QueryClient,
 	useQuery,
@@ -46,6 +46,7 @@ const getUser = createServerFn({ method: "GET" }).handler(async () => {
 	// const { headers } = getWebRequest()!;
 
 	const session = await authClient.getSession({
+		// @ts-ignore
 		fetchOptions: { headers, credentials: "include" },
 	});
 
@@ -62,15 +63,15 @@ export const Route = createRootRouteWithContext<{
 	// await queryClient.ensureQueryData(trpc.hello.queryOptions());
 	// },
 
-	beforeLoad: async ({ context }) => {
-		const user = await context.queryClient.fetchQuery({
-			queryKey: ["user"],
-			queryFn: ({ signal }) => getUser({ signal }),
-		}); // we're using react-query for caching, see router.tsx
+	// beforeLoad: async ({ context }) => {
+	// 	const user = await context.queryClient.fetchQuery({
+	// 		queryKey: ["user"],
+	// 		queryFn: ({ signal }) => getUser({ signal }),
+	// 	}); // we're using react-query for caching, see router.tsx
 
-		console.log({ user });
-		return { user };
-	},
+	// 	console.log({ user });
+	// 	return { user };
+	// },
 	head: () => ({
 		meta: [
 			{
@@ -121,7 +122,7 @@ function RootDocument({ children }: { readonly children: React.ReactNode }) {
           )`}
 				</ScriptOnce>
 
-				<AuthUIProvider
+				<AuthUIProviderTanstack
 					persistClient={false}
 					onSessionChange={() =>
 						queryClient.invalidateQueries({ queryKey: ["user"] })
@@ -151,7 +152,7 @@ function RootDocument({ children }: { readonly children: React.ReactNode }) {
 					<TanStackRouterDevtools position="bottom-right" />
 					<Scripts />
 					<Toaster />
-				</AuthUIProvider>
+				</AuthUIProviderTanstack>
 			</body>
 		</html>
 	);
