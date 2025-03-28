@@ -42,16 +42,12 @@ import type { AppRouter } from "../../../api/src/trpc";
 // });
 
 const getUser = createServerFn({ method: "GET" }).handler(async () => {
-	// const headers = getHeaders();
-	console.log("--- GET USER SERVER FUNCTION ---");
-	const { headers } = getWebRequest()!;
-	console.log({ headers });
+	const headers = getHeaders();
+	// const { headers } = getWebRequest()!;
 
 	const session = await authClient.getSession({
 		fetchOptions: { headers, credentials: "include" },
 	});
-
-	console.log({ session });
 
 	return session.data?.user ?? null;
 });
@@ -62,25 +58,19 @@ export const Route = createRootRouteWithContext<{
 	trpcClient: ReturnType<typeof createTRPCClient<AppRouter>>;
 	user: Awaited<ReturnType<typeof getUser>>;
 }>()({
-	beforeLoad: async ({ context: { trpc, queryClient } }) => {
-		await queryClient.ensureQueryData(trpc.hello.queryOptions());
-	},
-	// beforeLoad: async ({ context }) => {
-	// 	const user = await context.queryClient.fetchQuery({
-	// 		queryKey: ["user"],
-	// 		// queryFn: ({ signal }) => getUser({ signal }),
-	// 		queryFn: async () => {
-	// 			const res = await fetch("http://localhost:5173/user", {
-	// 				// headers: getHeaders(),
-	// 				credentials: "include",
-	// 			});
-	// 			return res.json();
-	// 		},
-	// 	}); // we're using react-query for caching, see router.tsx
-
-	// 	console.log({ user });
-	// 	return { user };
+	// loader: async ({ context: { trpc, queryClient } }) => {
+	// await queryClient.ensureQueryData(trpc.hello.queryOptions());
 	// },
+
+	beforeLoad: async ({ context }) => {
+		const user = await context.queryClient.fetchQuery({
+			queryKey: ["user"],
+			queryFn: ({ signal }) => getUser({ signal }),
+		}); // we're using react-query for caching, see router.tsx
+
+		console.log({ user });
+		return { user };
+	},
 	head: () => ({
 		meta: [
 			{
@@ -115,7 +105,7 @@ function RootDocument({ children }: { readonly children: React.ReactNode }) {
 	const trpc = useTRPC();
 	const helloQuery = useQuery(trpc.hello.queryOptions());
 
-	console.log({ helloQuery });
+	console.log({ helloQuery: helloQuery.data });
 
 	return (
 		// suppress since we're updating the "dark" class in a custom script below
@@ -147,6 +137,7 @@ function RootDocument({ children }: { readonly children: React.ReactNode }) {
 					viewPaths={{
 						signIn: "/signin",
 						signUp: "/signup",
+						signOut: "/signout",
 						forgotPassword: "/forgot",
 						resetPassword: "/reset",
 					}}
@@ -155,10 +146,6 @@ function RootDocument({ children }: { readonly children: React.ReactNode }) {
 					nameRequired
 					rememberMe
 				>
-					<Button onClick={async () => await getUser()}>Get User</Button>
-					<Button onClick={() => authClient.getSession()}>
-						Get User on Client
-					</Button>
 					{children}
 					<ReactQueryDevtools buttonPosition="bottom-left" />
 					<TanStackRouterDevtools position="bottom-right" />

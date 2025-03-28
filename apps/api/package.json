@@ -24,7 +24,7 @@
 		"drizzle-kit": "^0.30.6",
 		"vite": "^6.2.3",
 		"vite-plugin-ssr-hot-reload": "^0.3.4",
-		"wrangler": "^3.114.3"
+		"wrangler": "^4.5.1"
 	},
 	"packageManager": "bun@1.2.5"
 }

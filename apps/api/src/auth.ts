@@ -2,13 +2,13 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import type { Context } from "hono";
 import type { AppBindings } from ".";
-import getDb, * as schema from "./db";
-import { env } from "hono/adapter";
+import getDb from "./db";
+import * as schema from "./schema";
 
 export function getAuth(c: Context<AppBindings>) {
-	console.log({ env });
 	return betterAuth({
-		trustedOrigins: ["https://app.social-relay.com"],
+		trustedOrigins: ["http://localhost:3001", "https://app.social-relay.com"],
+		basePath: "/auth",
 		database: drizzleAdapter(getDb(c), {
 			schema,
 			provider: "sqlite",

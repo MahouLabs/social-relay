@@ -2,7 +2,6 @@ import type { D1Database } from "@cloudflare/workers-types";
 import { trpcServer } from "@hono/trpc-server";
 import { type Env, Hono } from "hono";
 import { env } from "hono/adapter";
-import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { getAuth } from "./auth";
 import { corsMiddleware } from "./middlewares/cors";
@@ -31,18 +30,17 @@ const app = new Hono<AppBindings>();
 app
 	.use(corsMiddleware)
 	.use(csrfMiddleware)
-	.use(sessionMiddleware)
+	.use("*", sessionMiddleware)
+	.use(logger())
 	.use("/trpc/*", trpcServer({ router: appRouter }));
 
-app.use(logger());
-app.use("*", sessionMiddleware);
-
 app.get("/", async (c) => {
+	console.log("--- REACHED API ---");
 	return c.text("Hello Hono!");
 });
 
 app.on(["POST", "GET"], "/auth/**", (c) => {
-	console.log({ env: env(c), headers: c.req.raw.headers });
+	console.log({ raw: c.req.raw });
 	return getAuth(c).handler(c.req.raw);
 });
 
