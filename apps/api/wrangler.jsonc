@@ -2,10 +2,14 @@
   "$schema": "../../node_modules/wrangler/config-schema.json",
   "name": "social-relay-api",
   "main": "src/index.ts",
-  "compatibility_date": "2025-03-22",
+  "compatibility_date": "2025-03-21",
   "observability": {
     "enabled": true,
     "head_sampling_rate": 1
+  },
+  "vars": {
+    "BETTER_AUTH_URL": "https://api.social-relay.com",
+    "ENVIRONMENT": "production"
   },
   "d1_databases": [
     {
