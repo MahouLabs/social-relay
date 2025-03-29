@@ -2,6 +2,7 @@
 
 @source "../../../../node_modules/@daveyplate/better-auth-ui";
 
+/* biome-ignore lint/correctness/noInvalidPositionAtImportRule: <explanation> */
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));

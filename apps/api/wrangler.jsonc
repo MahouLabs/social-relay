@@ -1,22 +1,22 @@
 {
-  "$schema": "../../node_modules/wrangler/config-schema.json",
-  "name": "social-relay-api",
-  "main": "src/index.ts",
-  "compatibility_date": "2025-03-21",
-  "observability": {
-    "enabled": true,
-    "head_sampling_rate": 1
-  },
-  "vars": {
-    "BETTER_AUTH_URL": "https://api.social-relay.com",
-    "ENVIRONMENT": "production"
-  },
-  "d1_databases": [
-    {
-      "binding": "DB",
-      "database_name": "social-relay-db",
-      "database_id": "7a9b42af-c1d7-43d6-8f7f-ffb95d5b4d43",
-      "migrations_dir": "drizzle"
-    }
-  ]
+	"$schema": "../../node_modules/wrangler/config-schema.json",
+	"name": "social-relay-api",
+	"main": "src/index.ts",
+	"compatibility_date": "2025-03-21",
+	"observability": {
+		"enabled": true,
+		"head_sampling_rate": 1
+	},
+	"vars": {
+		"BETTER_AUTH_URL": "https://api.social-relay.com",
+		"ENVIRONMENT": "production"
+	},
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "social-relay-db",
+			"database_id": "7a9b42af-c1d7-43d6-8f7f-ffb95d5b4d43",
+			"migrations_dir": "drizzle"
+		}
+	]
 }
