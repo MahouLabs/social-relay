@@ -10,6 +10,7 @@
 		"includes": [
 			"**",
 			"!**/routeTree.gen.ts",
+			"!**/globals.css",
 			"!**/node_modules/**",
 			"!**/.wrangler/**"
 		],
