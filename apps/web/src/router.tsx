@@ -28,7 +28,7 @@ export function createRouter() {
 	const trpcClient = createTRPCClient<AppRouter>({
 		links: [
 			httpBatchLink({
-				url: "http://localhost:5173/trpc",
+				url: `${import.meta.env.VITE_API_URL}/trpc`,
 				headers,
 			}),
 		],

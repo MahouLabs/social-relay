@@ -1,3 +1,4 @@
+import { AuthQueryProvider } from "@daveyplate/better-auth-tanstack";
 import { AuthUIProviderTanstack } from "@daveyplate/better-auth-ui/tanstack";
 import {
 	type QueryClient,
@@ -20,7 +21,6 @@ import { createIsomorphicFn, createServerFn } from "@tanstack/react-start";
 import { getHeaders, getWebRequest } from "@tanstack/react-start/server";
 import type { createTRPCClient } from "@trpc/client";
 import type { createTRPCOptionsProxy } from "@trpc/tanstack-react-query";
-import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import appCss from "@/styles/globals.css?url";
@@ -123,37 +123,39 @@ function RootDocument({ children }: { readonly children: React.ReactNode }) {
           )`}
 				</ScriptOnce>
 
-				<AuthUIProviderTanstack
-					persistClient={false}
-					onSessionChange={() =>
-						queryClient.invalidateQueries({ queryKey: ["user"] })
-					}
-					authClient={authClient}
-					navigate={(href) => router.navigate({ href })}
-					replace={(href) => router.navigate({ href, replace: true })}
-					LinkComponent={({ href, to, ...props }) => (
-						<Link to={href} {...props} />
-					)}
-					providers={["google"]}
-					defaultRedirectTo="/dashboard"
-					viewPaths={{
-						signIn: "/signin",
-						signUp: "/signup",
-						signOut: "/signout",
-						forgotPassword: "/forgot",
-						resetPassword: "/reset",
-					}}
-					colorIcons
-					emailVerification
-					nameRequired
-					rememberMe
-				>
-					<TooltipProvider>{children}</TooltipProvider>
-					<ReactQueryDevtools buttonPosition="bottom-left" />
-					<TanStackRouterDevtools position="bottom-right" />
-					<Scripts />
-					<Toaster />
-				</AuthUIProviderTanstack>
+				<AuthQueryProvider>
+					<AuthUIProviderTanstack
+						persistClient={false}
+						onSessionChange={() =>
+							queryClient.invalidateQueries({ queryKey: ["user"] })
+						}
+						authClient={authClient}
+						navigate={(href) => router.navigate({ href })}
+						replace={(href) => router.navigate({ href, replace: true })}
+						LinkComponent={({ href, to, ...props }) => (
+							<Link to={href} {...props} />
+						)}
+						providers={["google"]}
+						defaultRedirectTo="/dashboard"
+						viewPaths={{
+							signIn: "/signin",
+							signUp: "/signup",
+							signOut: "/signout",
+							forgotPassword: "/forgot",
+							resetPassword: "/reset",
+						}}
+						colorIcons
+						emailVerification
+						nameRequired
+						rememberMe
+					>
+						<TooltipProvider>{children}</TooltipProvider>
+						<ReactQueryDevtools buttonPosition="top-right" />
+						<TanStackRouterDevtools position="bottom-right" />
+						<Scripts />
+						<Toaster />
+					</AuthUIProviderTanstack>
+				</AuthQueryProvider>
 			</body>
 		</html>
 	);
